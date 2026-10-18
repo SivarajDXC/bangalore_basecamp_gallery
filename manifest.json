@@ -27,158 +27,59 @@
   ],
   "photos": [
     {
-      "file": "images/day1-general-01.jpg",
-      "title": "Day 1 General 01",
-      "day": "day1",
-      "category": "General"
-    },
-    {
-      "file": "images/day1-general-02.jpg",
-      "title": "Day 1 General 02",
-      "day": "day1",
-      "category": "General"
-    },
-    {
-      "file": "images/day1-session-01.jpg",
-      "title": "Day 1 Session 01",
-      "day": "day1",
-      "category": "Session"
-    },
-    {
-      "file": "images/day2-general-01.jpg",
-      "title": "Day 2 General 01",
-      "day": "day2",
-      "category": "General"
-    },
-    {
-      "file": "images/day2-session-01.jpg",
-      "title": "Day 2 Session 01",
-      "day": "day2",
-      "category": "Session"
-    },
-    {
-      "file": "images/day3-general-01.jpg",
-      "title": "Day 3 General 01",
-      "day": "day3",
-      "category": "General"
-    },
-    {
-      "file": "images/day3-general-02.jpg",
-      "title": "Day 3 General 02",
-      "day": "day3",
-      "category": "General"
-    },
-    {
-      "file": "images/day3-session-01.jpg",
-      "title": "Day 3 Session 01",
-      "day": "day3",
-      "category": "Session"
-    },
-    {
-      "file": "images/unassigned-01.jpg",
-      "title": "Unassigned 01",
-      "day": null,
-      "category": null
-    },
-    {
-      "file": "images/IMG_20261014_091225.jpg",
-      "day": null,
-      "category": null
-    },
-    {
-      "file": "images/IMG_20261014_092806.jpg",
-      "day": null,
-      "category": null
-    },
-    {
       "file": "images/IMG_20261014_104628.jpg",
-      "day": null,
-      "category": null
+      "day": "day1",
+      "category": "Session"
     },
     {
       "file": "images/IMG_20261014_104639.jpg",
-      "day": null,
-      "category": null
+      "day": "day1",
+      "category": "Session"
     },
     {
       "file": "images/IMG_20261014_104651.jpg",
-      "day": null,
-      "category": null
+      "day": "day1",
+      "category": "Session"
     },
     {
       "file": "images/IMG_20261014_104700.jpg",
-      "day": null,
-      "category": null
-    },
-    {
-      "file": "images/IMG_20261014_105213.jpg",
-      "day": null,
-      "category": null
-    },
-    {
-      "file": "images/IMG_20261014_105407.jpg",
-      "day": null,
-      "category": null
-    },
-    {
-      "file": "images/IMG_20261014_111251.jpg",
-      "day": null,
-      "category": null
-    },
-    {
-      "file": "images/IMG_20261014_123720.jpg",
-      "day": null,
-      "category": null
+      "day": "day1",
+      "category": "Session"
     },
     {
       "file": "images/IMG_20261014_143334.jpg",
-      "day": null,
-      "category": null
+      "day": "day1",
+      "category": "General"
     },
     {
       "file": "images/IMG_20261014_143346.jpg",
-      "day": null,
-      "category": null
+      "day": "day1",
+      "category": "General"
     },
     {
       "file": "images/IMG_20261014_143413.jpg",
-      "day": null,
-      "category": null
+      "day": "day1",
+      "category": "General"
     },
     {
       "file": "images/IMG_20261014_143424.jpg",
-      "day": null,
-      "category": null
+      "day": "day1",
+      "category": "General"
     },
     {
       "file": "images/IMG_20261014_143439.jpg",
-      "day": null,
-      "category": null
-    },
-    {
-      "file": "images/IMG_20261014_165612.jpg",
-      "day": null,
-      "category": null
-    },
-    {
-      "file": "images/IMG_20261014_165625.jpg",
-      "day": null,
-      "category": null
-    },
-    {
-      "file": "images/IMG_20261014_165629.jpg",
-      "day": null,
-      "category": null
+      "day": "day1",
+      "category": "General"
     },
     {
       "file": "images/IMG_20261014_174700.jpg",
-      "day": null,
-      "category": null
+      "day": "day1",
+      "category": "General"
     },
     {
       "file": "images/IMG_20261014_174706.jpg",
-      "day": null,
-      "category": null
+      "day": "day1",
+      "category": "General"
     }
   ]
 }
