@@ -14,6 +14,12 @@
   const ADMIN_SALT = 'DXC-Bangalore-Basecamp-2026';
   const ADMIN_HASH = '325e8803925a4e96ffb9879217b940f366379a012465be99db1299a8f40b1b95';
 
+  // Album access password (organisers share this with attendees). Same salt, separate hash.
+  const USER_SALT = 'DXC-Bangalore-Basecamp-2026';
+  const USER_HASH = '2f4ebeffaeb7622a9b354521189bbea5c66ba7baff8731e21d5800ba2bbfafdf';
+  const SESSION_KEY = 'em-session';
+  const SESSION_DAYS = 7;
+
   const $ = (sel) => document.querySelector(sel);
 
   const ui = {
@@ -22,7 +28,6 @@
     menuBtn: $('#menuBtn'),
     brandName: $('#brandName'),
     brandSub: $('#brandSub'),
-    sidebarFooter: $('#sidebarFooter'),
     nav: $('#nav'),
     dayNav: $('#dayNav'),
     countAll: $('#countAll'),
@@ -66,6 +71,15 @@
     loginError: $('#loginError'),
     loginCancel: $('#loginCancel'),
     toast: $('#toast'),
+    appShell: $('#appShell'),
+    loginGate: $('#loginGate'),
+    gateForm: $('#gateForm'),
+    gatePassword: $('#gatePassword'),
+    gateToggle: $('#gateToggle'),
+    gateError: $('#gateError'),
+    gateSubmit: $('#gateSubmit'),
+    gateCard: $('.gate-card'),
+    signOutBtn: $('#signOutBtn'),
   };
 
   const state = {
@@ -269,7 +283,6 @@
     const sub = state.event.subtitle || 'Photo album';
     ui.brandName.textContent = title;
     ui.brandSub.textContent = sub;
-    ui.sidebarFooter.textContent = state.event.footer || 'Three days. Every moment.';
     document.title = `${title} · ${sub}`;
   }
 
@@ -627,6 +640,84 @@
     ui.menuBtn.setAttribute('aria-expanded', String(open));
   }
 
+  /* ---------- Album login gate ---------- */
+
+  async function sha256Hex(text) {
+    if (!window.crypto || !window.crypto.subtle) {
+      throw new Error('Secure browsing (https or localhost) is required to unlock the album.');
+    }
+    const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+    return [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  // Remember the unlock for SESSION_DAYS. Stored hash must match USER_HASH, so changing the
+  // password in this file invalidates existing sessions.
+  function hasValidSession() {
+    try {
+      const s = JSON.parse(localStorage.getItem(SESSION_KEY) || 'null');
+      return !!s && s.h === USER_HASH && Date.now() < s.exp;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function saveSession() {
+    try {
+      localStorage.setItem(SESSION_KEY, JSON.stringify({
+        h: USER_HASH,
+        exp: Date.now() + SESSION_DAYS * 24 * 60 * 60 * 1000,
+      }));
+    } catch (e) { /* storage unavailable: the user just unlocks again next visit */ }
+  }
+
+  function clearSession() {
+    try { localStorage.removeItem(SESSION_KEY); } catch (e) { /* ignore */ }
+  }
+
+  function unlockAlbum() {
+    ui.loginGate.hidden = true;
+    ui.appShell.hidden = false;
+    loadManifest(false);
+  }
+
+  async function handleGateSubmit(e) {
+    e.preventDefault();
+    const value = ui.gatePassword.value;
+    if (!value) return;
+    ui.gateSubmit.disabled = true;
+    try {
+      const hash = await sha256Hex(USER_SALT + value);
+      if (hash === USER_HASH) {
+        ui.gateError.hidden = true;
+        ui.gatePassword.classList.remove('is-invalid');
+        saveSession();
+        unlockAlbum();
+      } else {
+        showGateError(ui.gateError.textContent);
+      }
+    } catch (err) {
+      ui.gateError.textContent = err.message;
+      showGateError();
+    } finally {
+      ui.gateSubmit.disabled = false;
+    }
+  }
+
+  function showGateError(message) {
+    if (message) ui.gateError.textContent = message;
+    ui.gateError.hidden = false;
+    ui.gatePassword.classList.add('is-invalid');
+    ui.gatePassword.select();
+    ui.gateCard.classList.remove('shake');
+    void ui.gateCard.offsetWidth; // restart the shake animation
+    ui.gateCard.classList.add('shake');
+  }
+
+  function signOut() {
+    clearSession();
+    window.location.reload();
+  }
+
   /* ---------- Events ---------- */
 
   ui.nav.addEventListener('click', (e) => {
@@ -641,6 +732,17 @@
     render();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
+
+  ui.gateForm.addEventListener('submit', handleGateSubmit);
+  ui.gateToggle.addEventListener('click', () => {
+    const show = ui.gatePassword.type === 'password';
+    ui.gatePassword.type = show ? 'text' : 'password';
+    ui.gateToggle.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+  });
+  ui.gatePassword.addEventListener('input', () => {
+    ui.gatePassword.classList.remove('is-invalid');
+  });
+  ui.signOutBtn.addEventListener('click', signOut);
 
   ui.themeBtn.addEventListener('click', () => applyTheme(currentTheme() === 'dark' ? 'light' : 'dark'));
 
@@ -747,5 +849,10 @@
   /* ---------- Start ---------- */
 
   applyTheme(currentTheme());
-  loadManifest(false);
+  if (hasValidSession()) {
+    unlockAlbum();
+  } else {
+    ui.loginGate.hidden = false;
+    setTimeout(() => ui.gatePassword.focus(), 50);
+  }
 })();
